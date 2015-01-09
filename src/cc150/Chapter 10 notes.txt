@@ -1,0 +1,82 @@
+For solving a problem with large scale:
+1. think about how to solve it when the scale is small, all data can be stored in one machine. Come up with possible solutions
+2. raise problems that may come up when data size is too large to fit in one machine. What rules should be implemented to decide
+which documents go to which machine? What problems there are when we add new data, delete data, or search for document, index 
+the document?
+3. modify the solution to deal with the problems.
+
+The example in book chapter:
+1. if the data size is small, we could make a hash table that hash from a word to a list of documents
+2. now data is so large that the hash table can't fit into one machine. We can divide the hash table by word or by documents
+	When we add a new document, we may need to push the document parse result to many other machines. How to do it? 
+	We may need a look-up table to store which data is stored in which machine. Where to keep it? (a copy in every machine? 
+	how to keep it in sync? If only one copy in a certain machine, backup? loss of connection? send request and receive feedback?)
+3. actual implementation to solve the problems. see the book
+
+P10_1 : Imagine you are building some sort of service that will be called by up to 1000 client applications to get simple end-of-day stock price information (open, close, high, low). You may assume that you already have the data, and you can store it in any format you wish. How would you design the client-facing service which provides the information toclientapplications?Youareresponsibleforthedevelopment,rollout, and ongoing monitoring and maintenance of the feed. Describe the different methods you considered and why you would recommend your approach. Your servicecanuseanytechnologiesyouwish,andcandistributetheinformation tothe client applications In any mechanism you choose.
+	In general, such a design needs to be simple for client, easy for myself, scalable and efficient, flexible for midifications.
+	Things to concern: 
+		1. how the data is stored? As text document? In SQL database? In XML document?
+			text file is simple and good for simple data, but hard to parse by program when data has its own structure and logic. 
+			So bad choice. 
+			SQL database has the advantage of good organization. It's easy to implement and do many kinds of queries. Others like
+			safety, backup, and rollback are provided. Disadvantage: too heavy weighted for simple project, we need an extra layer
+			to convert SQL result to human readable content, and its security level is not customized. We need extra limits
+			for certain actions
+			XML: easy to read for human and machine. There are tools to parse XML. It's easy to add new node. Our data format
+			is fixed so XML can handle it. Problem: query is hard, for any query we need to parse the entire file.
+		2. what operations the client side can have? For example, search stock by price/price change/high/low, sort, see 
+		trend/history...
+			We need to limit the operations so that no costly operation will be sent to server. 
+			keep certain flexibility so new operations may be added in the future?
+		3. How to design the structure? We may use SQL for backend data storage, implement a layer to receive client request in XML
+		format, query the database by server side, then send back result in HTML, XML or JSON. We can use REST archaetechture for 
+		server-client communication. Every additional feature adds safety and our control over the system, provides a cleaner 
+		interface doe user. But it also increases the weight for project, and limits freedom for client side application developers
+
+P10_2 : How would you design the data structures for a very large social network like Face- book or Linked/n? Describe how you would design an algorithm to show the connec- tion, or path, between two people (e.g., Me -> Bob -> Susan -> Jason -> You).
+	For a small group of users, it's easy. Just make a graph, each user is a node, each user has many friends. To find a connection, 
+	just do BFS. DFS is low efficient.
+	For a huge network such as FB, it is impossible to save all user info in one machine. So For each user, it's friend may be on a
+	different machine. We can assign each user an unique ID, then make a hash table that map from userID to machine ID, then a hashmap
+	from a machine ID to machine address(to establish connection). Then look for user object by user ID in the machine (make another hashtable
+	, or BST? etc.)
+	Optimization: machine jump is expensive. When doing BFS, batch up several friendIDs then query them all at once?
+	Optimization: Group users better. Group by country/profession(in linkedin), etc.
+	How to mark a node is visited in BFS in such system? Just pass by a hashtable for a query. There are multiple queries going on at the 
+	same time, so each "visited" record should be binded to a query, not to a user record
+	
+
+P10_5 : If you were designing a web crawler, how would you avoid getting into infinite loops?
+	1. use BFS. Mark all visited pages to avoid duplicate
+	2. how to mark visited page? By URL: Two pages of different URL's may have the same content. If we decide it based to page content, a page
+	may generate random content each time you visit it. So we can use a mixture of URL and content to create some signature. Each time we visit
+	a page, first query the database whether page with similar signature has been crawled before. If yes, put this page to the query list with 
+	low priority. If not visited, visit the page now.
+
+P10_6 : Youhave W billion URLs. How do you detect the duplicate documents?In this case, assume that "duplicate" means that the URLs are identical.
+	1. for small data size, just use a hashtable<String, Integer>, from URL to times of occurance
+	2. Now for large data, we can read through the data once, for each string, calculate its hash code, mod by 1000, and save to a txt file.
+	There will be 1000 txt files, each one stores 10 billion / 1000 = 10 million. If each string is 100 bytes average, that will be 1GB each
+	one file. The second iteration, just go through each file, and use the hashtable method we mentioned above to find duplicates.
+	3. alternatively, if data is too big to fit in one file, we can have each URL dispatched to a certain machine based on its hashCode. Then
+	each machine process its own smaller list at the same time, finally merge results to a single place. This way it's potentially faster because
+	of parallel processing, but the system is complicated and it's easy that one machine may fail in the middle. We need to handle failure.
+
+P10_7 : Imagine a web server for a simplified search engine.This system has WOmachines to respondtosearchqueries,whichmaythencalloutusingprocessSearch (string query) to another cluster of machines to actually get the result. The machine which responds to a given query is chosen at random, soyou can not guarantee that the same machine will always respond to the same request. Themethod process - Search is very expensive. Design a caching mechanism to cache the results of the most recent queries. Besure to explain how you would update the cache when data changes.
+	1. It's very important to discuss in depth with interviewer about the details of the system.
+	2. If we assume that making a query is more expensive than calling between machines. 
+	3. for a single machine, we can use a linked list for saving query results, keep a constant max size of the list. Then use a hash table, 
+	each query is mapped to a node in the list.
+	4. for multiple machines: again, segment the cache and hashtable so that each query's hash table mod machine numbers map to a certain machine
+	Then when a new query comes in, first ask the other machine whether the query is cached. If not, do the query.
+	5. Updating: Some popular query may never die out in cache. but the real search result may have changed over time. So there should be a
+	life-time of each cache so that each cache is automatically removed after certain time.
+
+
+
+
+
+
+
+	

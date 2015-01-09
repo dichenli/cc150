@@ -1,0 +1,9 @@
+to copy an array, some options:
+1. Integer[] list = new Integer[10];
+newList = (Integer[]) list.clone();
+this is a shallow copy method, only elements references are copied
+the clone() method is inherited from Object. It's a flawed method for most classes, but works fine for array
+because the method returns Object type, so casting is necessary
+2. Arrays.copyOf(int[] array, int newLength);
+returns a copy of array
+3. for ArrayList, we can call ArrayList<E> newList.addAll(Iterable<? extends E> oldList);

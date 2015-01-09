@@ -1,0 +1,7 @@
+In java, Hashtable is synchronized and thread safe. HashMap is not. 
+Hashtable don't allow null, HashMap allow one null in key and many nulls in values;
+
+For anyone, if you need two different object to hash to the same key, you need to implement both equals and hashCode methods
+so that these two objects are equal and has the same hash code.
+
+frequently used method: put(key, value), get(key), containsKey(key), isEmpty(), remove(key), clone(), values(), keySet()

@@ -1,0 +1,7 @@
+1. how to implement an iterator and iterable class
+2. implement quick sort
+3. generics and cast
+4. formatted printing
+5. thread and lock
+6. implement a bit vector
+7. Enumeration, collection and iteration

@@ -1,0 +1,4 @@
+Explain what the following code does: ((n & (n-1)) == 0).
+
+n & (n - 1) : find the last occurrance of 1 and convert it to 0.
+n & (n - 1) == 0: there is only one 1 (or it is zero) in n. so n is a power of 2 (or 0)

@@ -1,0 +1,13 @@
+For object oriented design:
+1. talk with interviewer to remove ambiguity. Don't make assumptions
+2. define core objects
+3. explicify relationships among objects
+4. make clear what are the behaviors of each object, determine methods and fields needed
+
+write down notes while making these specifications.
+while implementing OO design, there are always different ways to do them. Talk with interviewer, always focus on long term
+flexibility and maintainability
+
+Writing out scaffold and stubs/fake code is far more important than going to every details, if the problem is huge, so don't
+go into fight with details if the scaffold is not yet clear. You will waste time finding those sophisticated code you wrote 
+is useless.

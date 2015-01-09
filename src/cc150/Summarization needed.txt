@@ -1,0 +1,2 @@
+1. recursive problem with DP.  17.14
+2. bit manipulation. 18.1

@@ -1,0 +1,30 @@
+Testing:
+
+P12_2: 
+	1.	reasons for causing random place crash:
+		a.	random number
+		b.	uninitialized variable, esp. in C
+		c.	memory leak, such as heap overflow, stack corruption (such as buffer overflow by scanf), or simply not enough memory space.
+			crash may take place randomly because other applications may take random amount of memory resource at a given time.
+		d.	external dependencies, maybe other applications will feed input or control some aspects of the application
+	2.	What to do?
+		a.	talk with app developer to learn as much as possible about the app's functionality, how it was designed, what behaviors it has, etc.
+		b.	isolate and track down the source of problem. Eliminates as much aspects as possible to narrow down possible source of error
+		c.	Use tools. Runtime check (valgrind, GDB), unit test, etc.
+
+P12_3:
+	There are two major kinds of test cases for unit test: normal scenario test and exception case test. For exception test, we should know
+	whether the method should throw exception or return false, and test its behavior accordingly. For normal case, we should do as much as we can
+	to cover all possible moves, such as for every kind of piece(including empty piece, if such object exsists), every direction, every possible
+	enviornment, esp when other friend or enemy piece is in our way, or at the destination. Test both sides is also necessary
+
+P12_4:
+	Load testing helps to identify a web application's maximum operating capacity,as well as any bottlenecks that may interfere with its performance. 
+	Similarly,it can check how an application responds to variationsin load.
+	
+P12_5:
+	very wierd question, but to begin with, ask many questions on "who, what, where, when, how and why". A good tester knows exactly what he is testing
+	before he test it.
+	For structuring test, test whether it is what it is, then whether it does what it does, then whether it holds up/ don't cause trouble
+	when it is used in unintended usage.
+	Always test on both intended and unintended use of the object.

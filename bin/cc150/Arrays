@@ -1,0 +1,8 @@
+the java Arrays class: 
+http://docs.oracle.com/javase/7/docs/api/java/util/Arrays.html
+It's very handy class to help for array.
+1. Arrays.sort(array) : sort the array
+2. Arrays.copyOf(array, int newLength) : copy an array to a new array
+3. Arrays.equals(array1, array2) : compare each element of two arrays.
+4. Arrays.fill(array, value), fill the whole array of a given value. the type of value must be the same as type of array
+5. Arrays.toString(array), very useful when writing printing method. It returns an string representation of the array contents
